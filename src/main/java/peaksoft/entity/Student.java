@@ -9,6 +9,8 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Getter
 @Setter
@@ -21,7 +23,7 @@ public class Student {
     private String name;
     private int age;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY,mappedBy = "students")
+    @ManyToMany(cascade = {DETACH, MERGE,PERSIST}, fetch = FetchType.LAZY,mappedBy = "students")
     private List<Course> course = new ArrayList<>();
 
     public Student(String name, int age) {

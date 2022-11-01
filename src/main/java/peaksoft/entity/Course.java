@@ -7,40 +7,44 @@ import lombok.Setter;
 import lombok.ToString;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.REMOVE;
+import static jakarta.persistence.CascadeType.*;
 
 @Entity
+@Table (name = "courses")
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
-public class Course extends Student {
+
+public class Course{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String creatAt;
+    private LocalDate creatAt;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "course_students",
+    @ManyToMany(cascade = CascadeType.ALL)
+    /*@JoinTable(name = "course_students",
             joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id"))
+            inverseJoinColumns = @JoinColumn(name = "student_id"))*/
     private List<Student> students = new ArrayList<>();
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, REMOVE},
             fetch = FetchType.EAGER)
     private Teacher teacher;
 
-    public void addLessonsToCourses(Course course) {
-        this.students.add(course);
+
+    public void addLessonsToCourses(Student student) {
+      students.add(student);
     }
-    public Course(String name, String creatAt, List < Student > students, Teacher teacher) {
-            this.name = name;
-            this.creatAt = creatAt;
-            this.students = students;
-            this.teacher = teacher;
-        }
+
+    public Course(String name, LocalDate creatAt) {
+        this.name = name;
+        this.creatAt = creatAt;
     }
+}
+
+
